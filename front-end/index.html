@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Album – Smart Search</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Photo Album</h1>
+    <p class="sub">Search your photos in plain English — try “show me dogs” or “cats and trees”.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Search</h2>
+      <form id="search-form" class="row">
+        <input id="search-input" type="text" placeholder="show me photos with trees and birds" autocomplete="off" required>
+        <button type="submit">Search</button>
+      </form>
+      <p id="search-status" class="status"></p>
+      <div id="results" class="grid"></div>
+    </section>
+
+    <section class="card">
+      <h2>Upload a photo</h2>
+      <form id="upload-form">
+        <input id="file-input" type="file" accept="image/jpeg,image/png" required>
+        <input id="labels-input" type="text" placeholder="Custom labels (optional), comma-separated — e.g. Sam, Sally">
+        <button type="submit">Upload</button>
+      </form>
+      <p id="upload-status" class="status"></p>
+    </section>
+  </main>
+
+  <!-- API Gateway generated SDK (SDK1) -->
+  <script src="lib/axios/dist/axios.standalone.js"></script>
+  <script src="lib/CryptoJS/rollups/crypto-js.js"></script>
+  <script src="lib/CryptoJS/rollups/sha256.js"></script>
+  <script src="lib/CryptoJS/components/hmac.js"></script>
+  <script src="lib/CryptoJS/components/enc-base64.js"></script>
+  <script src="lib/url-template/url-template.js"></script>
+  <script src="lib/apiGatewayCore/sigV4Client.js"></script>
+  <script src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script src="lib/apiGatewayCore/utils.js"></script>
+  <script src="apigClient.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# P1 - builds and deploys both Lambda functions
+version: 0.2
+phases:
+  build:
+    commands:
+      - cd lambda-functions
+      - for fn in index-photos search-photos; do (cd $fn && zip -q -r ../$fn.zip .); done
+      - aws lambda update-function-code --function-name index-photos --zip-file fileb://index-photos.zip
+      - aws lambda update-function-code --function-name search-photos --zip-file fileb://search-photos.zip
+      - aws lambda wait function-updated --function-name index-photos
+      - aws lambda wait function-updated --function-name search-photos
+      - aws lambda update-function-configuration --function-name index-photos --handler lambda_function.lambda_handler
+      - aws lambda update-function-configuration --function-name search-photos --handler lambda_function.lambda_handler
+      - aws lambda wait function-updated --function-name index-photos
+      - aws lambda wait function-updated --function-name search-photos
+      - echo "Lambda functions deployed"
+artifacts:
+  files:
+    - lambda-functions/*.zip

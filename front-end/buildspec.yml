@@ -1,0 +1,12 @@
+# P2 - packages the frontend; the pipeline's Deploy stage copies it to the S3 website bucket (B1)
+version: 0.2
+phases:
+  build:
+    commands:
+      - echo "Packaging frontend for S3"
+artifacts:
+  base-directory: front-end
+  files:
+    - '**/*'
+  exclude-paths:
+    - buildspec.yml
