@@ -47,11 +47,8 @@ def lambda_handler(event, context):
         labels = [l.strip().lower() for l in custom.split(",") if l.strip()]
 
         # Append Rekognition labels
-        rek = rekognition.detect_labels(
-            Image={"S3Object": {"Bucket": bucket, "Name": key}},
-            MaxLabels=20,
-            MinConfidence=70,
-        )
+        # No MaxLabels/MinConfidence limits: index every label Rekognition returns
+        rek = rekognition.detect_labels(Image={"S3Object": {"Bucket": bucket, "Name": key}})
         for label in rek["Labels"]:
             name = label["Name"].lower()
             if name not in labels:
