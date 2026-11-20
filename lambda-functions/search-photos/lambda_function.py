@@ -5,6 +5,7 @@ Returns {"results": [{"url": ..., "labels": [...]}]} (empty if no keywords).
 import base64
 import json
 import os
+import re
 import urllib.request
 
 import boto3
@@ -43,6 +44,17 @@ def get_keywords(q):
     return words
 
 
+# Words that are never photo labels, used only when Lex returns no slot values
+STOP = {"show", "me", "photos", "photo", "pictures", "picture", "pics", "images", "image", "of", "with",
+        "and", "in", "them", "it", "the", "a", "an", "find", "search", "for", "i", "want", "to", "see",
+        "some", "any", "please", "all", "that", "have", "has", "contain", "containing", "or"}
+
+
+def fallback_keywords(q):
+    """If Lex recognised no keyword (e.g. a single word it was never trained on), use the query's content words."""
+    return [w for w in re.findall(r"[a-z0-9]+", q.lower()) if w not in STOP][:5]
+
+
 def search(keywords):
     terms = set()
     for k in keywords:
@@ -68,7 +80,7 @@ def lambda_handler(event, context):
     print("query:", q)
     results = []
     if q:
-        keywords = get_keywords(q)
+        keywords = get_keywords(q) or fallback_keywords(q)
         print("keywords:", keywords)
         if keywords:
             results = search(keywords)
