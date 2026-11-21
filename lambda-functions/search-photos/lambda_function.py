@@ -64,8 +64,15 @@ def search(keywords):
     req = urllib.request.Request(f"https://{ES}/{INDEX}/_search", data=json.dumps(body).encode(),
                                  method="POST", headers={"Content-Type": "application/json",
                                                          "Authorization": f"Basic {AUTH}"})
-    with urllib.request.urlopen(req, timeout=10) as r:
-        hits = json.loads(r.read())["hits"]["hits"]
+    for attempt in range(3):  # retry: a single-node domain can occasionally be slow to answer
+        try:
+            with urllib.request.urlopen(req, timeout=8) as r:
+                hits = json.loads(r.read())["hits"]["hits"]
+            break
+        except Exception as e:
+            print(f"search attempt {attempt + 1} failed: {e!r}")
+            if attempt == 2:
+                raise
     out = []
     for h in hits:
         d = h["_source"]
